@@ -6,6 +6,9 @@
   <title>Check domain on batch</title>
   <script type='text/javascript' src='//code.jquery.com/jquery-1.11.0.js'></script>
   <style type='text/css'>
+h3 {
+  font-size: 2em;
+}
 #main {
     float : left;
     width : 94%;
@@ -16,9 +19,11 @@
 textarea {
     font-size: 2em;
     width : 97%;
+    border : solid 1px gray;
 }
 button {
-    height: 36px;
+    height: 2en;
+    font-size: 1.2em;
 }
 .active {
     color: green
@@ -224,11 +229,13 @@ function remove(arr, what) {
 <h3>簡単、強力なドメイン名検索エンジン</h3>
 
     <hr>
-    <p><b>【使い方】</b>：
+    <p><b>【使い方】</b></p>
+    <p>
         <br />・空白と改行で区切り、
         <br />・「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」
         <br />・「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」</p>
-    <p><b>【検索条件】</b>
+    <p><b>【検索条件】</b></p>
+    <p>
         <button class="check_all">全ドメイン名チェック</button>
         <button class="search">検索</button>
         <br>
