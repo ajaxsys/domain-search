@@ -160,7 +160,7 @@ function convertEscpase(vals) {
                 result.push(vals[v].replace("\*", String.fromCharCode(i)));
             }
         }
-        if (vals[v].indexOf("?") > 0) {
+        if (vals[v].indexOf("?") > -1) {
             hit = true;
             for (var i = 0; i <= 9; i++) {
                 result.push(vals[v].replace("?", i));
