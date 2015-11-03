@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Check domain on batch</title>
+  <script type='text/javascript' src='//code.jquery.com/jquery-1.11.0.js'></script>
+  <style type='text/css'>
+#main {
+    float : left;
+    width : 94%;
+    padding : 0;
+    margin : 3%;
+    font-size: 22px;
+}
+textarea {
+    font-size: 36px;
+    width : 97%;
+}
+button {
+    height: 36px;
+}
+.active {
+    color: green
+}
+.inactive {
+    color: gray
+}
+.unknown {
+    color: red
+}
+.sub_title {
+    background-color: gray;
+    color: white;
+    text-align: center;
+}
+.default_margin {
+    margin:30px
+}
+  </style>
+
+<script type='text/javascript'>//<![CDATA[
+$(window).load(function(){
+//checkDomain("sjkd1","jp");
+var buf = [],
+    timer = null,
+    PARALLEL_NUM = 20;
+
+(function () {
+    enableCheckAll();
+
+    $(".search").click(function () {
+        clearResult();
+
+        var text = $("#condition").val().replace(/\n/g, " ").replace(/^\s+|\s+$/g, '');
+        if (text.length === 0) return false;
+
+        var vals = text.split(/\s+/),
+            allVals = [];
+        vals = convertEscpase(vals);
+        vals = convertEscpase(vals);
+        // unique
+        vals = $.grep(vals, function (v, k) {
+            return $.inArray(v, vals) === k;
+        });
+        console.log(vals);
+
+        var domains = $("#domain_area input:checkbox:checked").map(function () {
+            return $(this).val();
+        }).get();
+
+        console.log(domains);
+
+        for (var d = 0; d < domains.length; d++) {
+
+            var domain = domains[d],
+                rows = "",
+                randomStr = makeid(5) + "_",
+                SIZE = vals.length;
+
+            rows += "<tr class='sub_title'><td colspan=3>" + domain + "</td></tr>";
+            for (var i = 1; i <= vals.length; i++) {
+                rows += "<tr id='row_" + randomStr + i + "'><td>" + i + "</td><td>" + vals[i - 1] + "." + domain + "</td><td id='result_" + randomStr + i + "'>検索中。。。</td></tr>";
+
+                allVals.push({
+                    "name": vals[i - 1],
+                        "domain": domain,
+                        "seq": randomStr + i
+                });
+            }
+            $("#result").append(rows);
+
+        }
+
+
+        timer = setInterval(function () {
+            if (allVals.length === 0 && timer) {
+                //debugger;
+                clearTimer()
+                console.log("Search complete.");
+                return;
+            }
+            if (buf.length < PARALLEL_NUM && allVals.length > 0) {
+                var nextSearch = allVals.shift();
+                buf.push(nextSearch.seq);
+                console.log(nextSearch.name, nextSearch.domain, " -- [buf]Added", nextSearch.seq);
+                checkDomain(nextSearch.name, nextSearch.domain, nextSearch.seq);
+            }
+        }, 100);
+
+    });
+})();
+
+function clearResult() {
+    $("#result_header").nextAll().remove();
+
+    buf = [];
+    clearTimer();
+}
+
+function clearTimer() {
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
+        console.log("Timmer cleared");
+    }
+}
+
+function enableCheckAll() {
+    $("#check_all").click(function () {
+        if ($("#domain_area input:checkbox:not(:checked)").length > 0) $("#domain_area input:checkbox").prop("checked", true);
+        else $("#domain_area input:checkbox").prop("checked", false);
+    });
+}
+
+function makeid(n) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for (var i = 0; i < n; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function convertEscpase(vals) {
+    var result = [];
+    for (var v in vals) {
+        var hit = false;
+        if (vals[v].indexOf("\*") > -1) {
+            hit = true;
+            var first = "a",
+                last = "z";
+            for (var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
+                result.push(vals[v].replace("\*", String.fromCharCode(i)));
+            }
+        }
+        if (vals[v].indexOf("?") > 0) {
+            hit = true;
+            for (var i = 0; i <= 9; i++) {
+                result.push(vals[v].replace("?", i));
+            }
+        }
+        if (!hit) {
+            result.push(vals[v]);
+        }
+    }
+    return result;
+}
+
+function checkDomain(name, domain, seq) {
+
+    $.ajax({
+        type: 'GET',
+        url: 'https://www.apisystem.com/DomainSearch/check.php',
+        dataType: 'jsonp',
+        data: {
+            sld: name,
+            tld: domain
+        },
+        success: function (json) {
+            var status = "不明",
+                style = "";
+            switch (json.RrpCode) {
+                case "210":
+                    status = "有効";
+                    style = "active";
+                    break;
+                case "211":
+                    status = "無効";
+                    style = "inactive";
+                    break;
+                default:
+                    style = "unknown";
+            }
+
+            $("#row_" + seq).attr('class', style);
+            $("#result_" + seq).text(status);
+            remove(buf, seq);
+        },
+        error: function () {
+            remove(buf, seq);
+        }
+    });
+}
+
+function remove(arr, what) {
+    console.log("[buf]Removed", what);
+    var found = arr.indexOf(what);
+
+    while (found !== -1) {
+        arr.splice(found, 1);
+        found = arr.indexOf(what);
+    }
+}
+});//]]> 
+
+</script>
+
+</head>
+<body>
+  <div id="main">
+    
+<h3>簡単、強力なドメイン名・検索エンジニア</h3>
+
+    <hr>
+    <p>　<b>使い方</b>：空白と改行で区切り、
+        <br />　　　　　「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」
+        <br />　　　　　「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」</p>
+    <p>　<b>検索条件：</b>
+
+        <button id="check_all">全ドメイン名チェック</button>
+        <button class="search">検索</button>
+        <br>
+        <div id="domain_area" class="default_margin">
+            <input type="checkbox" checked id="i1" value="co.jp">
+            <label for="i1">co.jp</label>
+            <input type="checkbox" checked id="i2" value="jp">
+            <label for="i2">jp</label>
+            <input type="checkbox" checked id="i3" value="com">
+            <label for="i3">com</label>
+            <input type="checkbox" id="i4" value="net">
+            <label for="i4">net</label>
+            <input type="checkbox" id="i5" value="org">
+            <label for="i5">org</label>
+        </div>
+        <p/>　
+        <textarea id="condition" rows="10">*dh</textarea>
+        <br />　
+        <button class="search">検索</button>
+        <div class="default_margin">
+            <table id="result" border="1">
+                <thead id="result_header">
+                    <tr>
+                        <th>　番号　</th>
+                        <th>　ドメイン名　</th>
+                        <th>　検索結果　</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+</div>
+  
+</body>
+
+</html>
+
