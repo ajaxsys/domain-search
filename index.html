@@ -11,10 +11,10 @@
     width : 94%;
     padding : 0;
     margin : 3%;
-    font-size: 22px;
+    font-size: 1.6em;
 }
 textarea {
-    font-size: 36px;
+    font-size: 2em;
     width : 97%;
 }
 button {
@@ -35,7 +35,7 @@ button {
     text-align: center;
 }
 .default_margin {
-    margin:30px
+    margin:3%
 }
   </style>
 
@@ -127,7 +127,7 @@ function clearTimer() {
 }
 
 function enableCheckAll() {
-    $("#check_all").click(function () {
+    $(".check_all").click(function () {
         if ($("#domain_area input:checkbox:not(:checked)").length > 0) $("#domain_area input:checkbox").prop("checked", true);
         else $("#domain_area input:checkbox").prop("checked", false);
     });
@@ -221,15 +221,15 @@ function remove(arr, what) {
 <body>
   <div id="main">
     
-<h3>簡単、強力なドメイン名・検索エンジニア</h3>
+<h3>簡単、強力なドメイン名検索エンジン</h3>
 
     <hr>
-    <p>　<b>使い方</b>：空白と改行で区切り、
-        <br />　　　　　「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」
-        <br />　　　　　「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」</p>
-    <p>　<b>検索条件：</b>
-
-        <button id="check_all">全ドメイン名チェック</button>
+    <p>　<b>【使い方】</b>：
+        <br />空白と改行で区切り、
+        <br />「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」
+        <br />「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」</p>
+    <p>　<b>【検索条件】</b>
+        <button class="check_all">全ドメイン名チェック</button>
         <button class="search">検索</button>
         <br>
         <div id="domain_area" class="default_margin">
