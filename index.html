@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Check domain on batch</title>
-  <script type='text/javascript' src='//code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src='./jquery-1.11.0.js'></script>
   <style type='text/css'>
 h3 {
   font-size: 2em;
@@ -24,6 +24,7 @@ textarea {
 button {
     height: 2en;
     font-size: 1.2em;
+    margin-right: 0.5em;
 }
 .active {
     color: green
@@ -33,6 +34,9 @@ button {
 }
 .unknown {
     color: red
+}
+.hideInvalid .inactive{
+    display: none;
 }
 .sub_title {
     background-color: gray;
@@ -53,6 +57,10 @@ var buf = [],
 
 (function () {
     enableCheckAll();
+
+    $("#show_ok").click(function(){
+        $("#result").toggleClass("hideInvalid");
+    });
 
     $(".search").click(function () {
         clearResult();
@@ -255,8 +263,10 @@ function remove(arr, what) {
         <textarea id="condition" rows="4">*dh</textarea>
         <br />　
         <button class="search">検索</button>
+        <input type="checkbox" id="show_ok" checked>
+        <label for="show_ok">有効のみ</label>
         <div class="default_margin">
-            <table id="result" border="1">
+            <table id="result" class="hideInvalid" border="1">
                 <thead id="result_header">
                     <tr>
                         <th>　番号　</th>
