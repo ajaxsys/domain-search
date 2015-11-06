@@ -9,6 +9,20 @@
 h3 {
   font-size: 2em;
 }
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
+}
+label {
+  /* Checkbox text */
+  font-size: 120%;
+  display: inline;
+}
 #main {
     float : left;
     width : 94%;
@@ -49,6 +63,7 @@ button {
   </style>
 
 <script type='text/javascript'>//<![CDATA[
+
 $(window).load(function(){
 //checkDomain("sjkd1","jp");
 var buf = [],
@@ -232,6 +247,9 @@ function remove(arr, what) {
 
 </head>
 <body>
+<script type="text/javascript">
+    if (!mobilecheck()) $("body").css("font-size", "75%");
+</script>
   <div id="main">
     
 <h3>簡単、強力なドメイン名検索エンジン</h3>
@@ -243,11 +261,9 @@ function remove(arr, what) {
         ・「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」<br />
         ・「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」<br /></p>
     <p><b>【検索条件】</b></p>
-    <p>
-        <button class="check_all">全ドメイン名チェック</button>
-        <button class="search">検索</button>
-        <br>
+
         <div id="domain_area" class="default_margin">
+            <button class="check_all">全てチェック</button>
             <input type="checkbox" checked id="i1" value="co.jp">
             <label for="i1">co.jp</label>
             <input type="checkbox" checked id="i2" value="jp">
@@ -258,13 +274,15 @@ function remove(arr, what) {
             <label for="i4">net</label>
             <input type="checkbox" id="i5" value="org">
             <label for="i5">org</label>
+            <button class="search">検索</button> 
+            <br /><br />
+            <textarea id="condition" rows="4">*dh</textarea>
+            <br /><br />
+            <button class="search">検索</button>
+            <input type="checkbox" id="show_ok" checked>
+            <label for="show_ok">有効のみ</label>
         </div>
-        <p/>　
-        <textarea id="condition" rows="4">*dh</textarea>
-        <br />　
-        <button class="search">検索</button>
-        <input type="checkbox" id="show_ok" checked>
-        <label for="show_ok">有効のみ</label>
+
         <div class="default_margin">
             <table id="result" class="hideInvalid" border="1">
                 <thead id="result_header">
