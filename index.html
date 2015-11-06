@@ -257,30 +257,31 @@ function remove(arr, what) {
     <hr>
     <p><b>【使い方】</b></p>
     <p>
-        ・空白と改行で区切り、<br />
+        ・キーワードを空白と改行で区切り、<br />
         ・「*」は「a-z」の意味。例：ab*とは「aba, abb, ... , abz」<br />
         ・「?」は「1-9」の意味。例：ab?とは「ab0, ab1, ... , ab9」<br /></p>
     <p><b>【検索条件】</b></p>
-
-        <div id="domain_area" class="default_margin">
-            <button class="check_all">全てチェック</button>
-            <input type="checkbox" checked id="i1" value="co.jp">
-            <label for="i1">co.jp</label>
-            <input type="checkbox" checked id="i2" value="jp">
-            <label for="i2">jp</label>
-            <input type="checkbox" checked id="i3" value="com">
-            <label for="i3">com</label>
-            <input type="checkbox" id="i4" value="net">
-            <label for="i4">net</label>
-            <input type="checkbox" id="i5" value="org">
-            <label for="i5">org</label>
-            <button class="search">検索</button> 
+        <div class="default_margin">
+            <div id="domain_area">
+                <button class="check_all">全てチェック</button>
+                <input type="checkbox" checked id="i1" value="co.jp">
+                <label for="i1">co.jp</label>
+                <input type="checkbox" checked id="i2" value="jp">
+                <label for="i2">jp</label>
+                <input type="checkbox" checked id="i3" value="com">
+                <label for="i3">com</label>
+                <input type="checkbox" id="i4" value="net">
+                <label for="i4">net</label>
+                <input type="checkbox" id="i5" value="org">
+                <label for="i5">org</label>
+                <button class="search">検索</button> 
+            </div>
             <br /><br />
             <textarea id="condition" rows="4">*dh</textarea>
             <br /><br />
             <button class="search">検索</button>
             <input type="checkbox" id="show_ok" checked>
-            <label for="show_ok">有効のみ</label>
+            <label for="show_ok">有効な検索結果のみ表示</label>
         </div>
 
         <div class="default_margin">
