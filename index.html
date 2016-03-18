@@ -109,6 +109,11 @@ var buf = [],
             $("#result_area").append($result);
         }
 
+        var eachVals = [];
+        for (var d = 0; d < domains.length; d++) {
+            eachVals[d] = [];
+        }
+
         for (var d = 0; d < domains.length; d++) {
 
             var domain = domains[d],
@@ -120,14 +125,21 @@ var buf = [],
             for (var i = 1; i <= vals.length; i++) {
                 rows += "<tr id='row_" + randomStr + i + "'><td>" + i + "</td><td>" + vals[i - 1] + "." + domain + "</td><td id='result_" + randomStr + i + "'>・・・</td></tr>";
 
-                allVals.push({
+                eachVals[d].push({
                     "name": vals[i - 1],
-                        "domain": domain,
-                        "seq": randomStr + i
+                    "domain": domain,
+                    "seq": randomStr + i
                 });
             }
             $("#result"+d).append(rows);
+        }
 
+        if (eachVals.length > 0) {
+            for (var e = 0; e < eachVals[0].length; e++) {
+                for (var d = 0; d < domains.length; d++) {
+                    allVals.push(eachVals[d][e]);
+                }
+            }
         }
 
 
