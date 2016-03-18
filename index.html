@@ -74,13 +74,16 @@ var buf = [],
     enableCheckAll();
 
     $("#show_ok").click(function(){
-        $("#result").toggleClass("hideInvalid");
+        $("#result_area .results").toggleClass("hideInvalid");
+    });
+    $("#show_all_ok").click(function(){
+        // TODO
     });
 
     $(".search").click(function () {
         clearResult();
 
-        var text = $("#condition").val().replace(/\n/g, " ").replace(/^\s+|\s+$/g, '');
+        var text = $("#condition").val().replace(/\n|,|;/g, " ").replace(/^\s+|\s+$/g, '');
         if (text.length === 0) return false;
 
         var vals = text.split(/\s+/),
@@ -99,6 +102,13 @@ var buf = [],
 
         console.log(domains);
 
+        $("#result_area").empty();
+        for (var d = 0; d < domains.length; d++) {
+            var $result = $("#template").clone();
+            $result.attr("id", "result"+d).show();
+            $("#result_area").append($result);
+        }
+
         for (var d = 0; d < domains.length; d++) {
 
             var domain = domains[d],
@@ -108,7 +118,7 @@ var buf = [],
 
             rows += "<tr class='sub_title'><td colspan=3>" + domain + "</td></tr>";
             for (var i = 1; i <= vals.length; i++) {
-                rows += "<tr id='row_" + randomStr + i + "'><td>" + i + "</td><td>" + vals[i - 1] + "." + domain + "</td><td id='result_" + randomStr + i + "'>検索中。。。</td></tr>";
+                rows += "<tr id='row_" + randomStr + i + "'><td>" + i + "</td><td>" + vals[i - 1] + "." + domain + "</td><td id='result_" + randomStr + i + "'>・・・</td></tr>";
 
                 allVals.push({
                     "name": vals[i - 1],
@@ -116,7 +126,7 @@ var buf = [],
                         "seq": randomStr + i
                 });
             }
-            $("#result").append(rows);
+            $("#result"+d).append(rows);
 
         }
 
@@ -290,20 +300,22 @@ function remove(arr, what) {
             <textarea id="condition" rows="4">*dh</textarea>
             <br /><br />
             <button class="search">検索</button>
-            <input type="checkbox" id="show_ok" checked>
+            <input type="checkbox" id="show_ok">
             <label for="show_ok">有効な検索結果のみ表示</label>
+            <input type="checkbox" id="show_all_ok">
+            <label for="show_ok">全てDomain一致のみ表示</label>
         </div>
 
-        <div class="default_margin">
-            <table id="result" class="hideInvalid" border="1">
-                <thead id="result_header">
-                    <tr>
-                        <th>　番号　</th>
-                        <th>　ドメイン名　</th>
-                        <th>　検索結果　</th>
-                    </tr>
-                </thead>
-            </table>
+        <table id="template" class="results" class="hideInvalid" border="1" width="280px" style="float: left;display:none">
+            <thead id="result_header">
+                <tr>
+                    <th>#</th>
+                    <th>Domain</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result_area" class="default_margin" width="900px">
         </div>
 </div>
 
